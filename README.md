@@ -1,0 +1,145 @@
+# Ares LFRP Plugin
+
+An unofficial Looking for RP plugin for AresMUSH.
+
+This plugin lets approved characters mark themselves as looking for roleplay and displays active LFRP entries in the web portal sidebar.
+
+The original idea for adding a Looking for RP sidebar tool to an AresMUSH web portal was inspired by [Red Planet](https://redplanetmu.com/).
+
+## Support Status
+
+This is an unofficial community plugin. It is not part of AresMUSH core.
+
+This plugin was built for Age of Heroes MUSH and is shared for other AresMUSH games that want a lightweight Looking for RP sidebar tool.
+
+Tested on AresMUSH / ares-webportal v2.11.x.
+
+Other versions may work, but have not been tested.
+
+## Features
+
+* Lets approved characters mark themselves as looking for RP.
+* Lets players clear their LFRP status.
+* Shows active LFRP entries in the web portal sidebar.
+* Supports scene-type labels: Any Scene, TXT Only, Live Only, and Async Only.
+* Expires LFRP entries automatically.
+* Provides in-game commands and help.
+* Provides web request handlers for portal integration.
+* Includes optional neutral sidebar styling.
+
+## Commands
+
+The plugin provides the following in-game commands:
+
+    lfrp
+    lfrp/list
+    lfrp/stop
+
+The exact help text is included in:
+
+    plugin/help/en/lfrp.md
+
+## Configuration
+
+Configuration lives in:
+
+    game/config/lfrp.yml
+
+Default configuration:
+
+    ---
+    lfrp:
+      default_hours: 6
+      max_hours: 12
+
+`default_hours` controls how long an LFRP entry lasts when no duration is provided.
+
+`max_hours` caps the longest LFRP duration.
+
+`announce_channel` controls which channel receives LFRP start, stop, and preference-change announcements.
+
+`shortcuts` may be used to define Ares command shortcuts for the plugin. It is empty by default.
+
+If the config file is missing or incomplete, the plugin falls back to 6 default hours, 12 max hours, and the `RP Requests` announce channel.
+
+## Repository Layout
+
+    game/config/
+      lfrp.yml
+
+    plugin/
+      Server-side AresMUSH plugin files. Ares installs these into `aresmush/plugins/lfrp/`.
+
+    custom_files/
+      Web portal files, styling, and merge templates.
+
+## Install
+
+1. Run `plugin/install REPO_URL`.
+2. Review `game/config/lfrp.yml`.
+3. Review the files in `custom_files/`.
+4. Merge the sidebar files into your web portal if needed.
+5. Add the optional LFRP styling to your theme if desired.
+6. Run `website/deploy` after modifying anything in `ares-webportal`.
+
+## Web Portal Files
+
+The web portal files are provided as custom files because many AresMUSH games already customize their sidebar and custom website data.
+
+Do not blindly overwrite your existing web portal or website custom files if your game already has local edits.
+
+Common files to compare and merge:
+
+    aresmush/plugins/website/custom_web_data.rb
+    ares-webportal/app/components/sidebar-custom.hbs
+    ares-webportal/app/components/sidebar-custom.js
+
+`custom_web_data.rb` supplies the sidebar with the LFRP list and whether the current viewer can use LFRP.
+
+The included sidebar component uses these web request handlers:
+
+    lfrpList
+    lfrpStart
+    lfrpStop
+
+The sidebar refreshes the LFRP list automatically.
+
+## Styling
+
+This repository includes optional neutral sidebar styling in:
+
+    custom_files/lfrp.scss
+
+Copy that file into your game's `custom_style.scss`, or adapt it to match your site's theme.
+
+The stylesheet intentionally avoids Age of Heroes-specific colors, fonts, borders, shadows, and comic-page styling. It only provides basic layout rules for the LFRP sidebar list, buttons, dropdown, empty state, and scene-type badge.
+
+The main classes are:
+
+    .looking-for-rp
+    .lfrp-list
+    .lfrp-entry
+    .lfrp-empty
+    .lfrp-buttons
+    .lfrp-button
+    .lfrp-scene-type-badge
+
+## What This Plugin Does Not Do
+
+This plugin does not overwrite `who.hbs`.
+
+Games that want a Who-page LFRP indicator should add that separately as a local customization.
+
+This plugin does not include a full site theme.
+
+This plugin does not guarantee compatibility with every customized sidebar. If your game already has significant sidebar changes, merge the custom files manually.
+
+## Uninstall
+
+You will need to remove the LFRP database objects, remove the plugin files, remove the config file, and remove any web portal customizations you merged manually.
+
+See the AresMUSH guide to removing plugins for general help:
+
+https://aresmush.com/tutorials/code/contribs.html#uninstalling-plugins
+
+

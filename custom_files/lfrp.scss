@@ -1,0 +1,105 @@
+/* ============================================================
+   LFRP Sidebar Styles
+   Optional web portal styling for the Ares LFRP plugin.
+
+   Copy this into your game's custom_style.scss, or adapt it to match
+   your site's theme.
+   ============================================================ */
+
+.looking-for-rp {
+  display: block;
+  width: 100%;
+}
+
+.lfrp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem 0;
+  padding: 0;
+}
+
+.lfrp-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.25rem 0;
+}
+
+.lfrp-entry .inline-block,
+.lfrp-entry .char-icon-inline,
+.lfrp-entry .tiny-profile-icon {
+  flex: 0 0 auto;
+}
+
+.lfrp-entry .tiny-profile-icon {
+  vertical-align: middle;
+}
+
+.lfrp-scene-type-badge {
+  flex: 0 0 auto;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.lfrp-empty {
+  margin: 0.35rem 0 0.75rem 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.lfrp-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.lfrp-button {
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.lfrp-buttons .dropdown,
+.lfrp-buttons .dropup,
+.lfrp-buttons .btn-group {
+  width: 100%;
+}
+
+.lfrp-buttons .dropdown-menu {
+  min-width: 100%;
+}
+
+.lfrp-buttons .dropdown-item {
+  cursor: pointer;
+}
+
+/* Keep the sidebar dropdown visible even inside narrow or styled sidebars. */
+
+.looking-for-rp,
+.lfrp-buttons,
+.lfrp-buttons .dropdown,
+.lfrp-buttons .dropup,
+.lfrp-buttons .btn-group {
+  overflow: visible;
+}
+
+.lfrp-buttons .dropdown-menu.show,
+.lfrp-buttons .dropup .dropdown-menu.show {
+  z-index: 1050;
+}
+
+/* Small-screen cleanup. */
+
+@media screen and (max-width: 600px) {
+  .lfrp-entry {
+    align-items: flex-start;
+  }
+
+  .lfrp-scene-type-badge {
+    margin-left: 0.25rem;
+  }
+}

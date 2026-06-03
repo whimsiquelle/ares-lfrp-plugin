@@ -1,0 +1,97 @@
+<div class="sidebar-box {{this.boxStyle}}">
+  <div class="sidebar-heading">
+    <h2>Looking for RP</h2>
+  </div>
+
+  <div class="looking-for-rp">
+    {{#if this.custom.lfrp.length}}
+      <div class="lfrp-list">
+        {{#each this.custom.lfrp as |entry|}}
+          <div
+            class="lfrp-entry"
+            title="{{entry.name}} - {{entry.scene_type_label}}{{unless entry.online " - Offline"}}"
+          >
+            <CharIconInline @char={{entry.char}} />
+
+            {{#if entry.show_scene_type_badge}}
+              <span class="badge-sidebar-bgs lfrp-scene-type-badge">
+                {{entry.scene_type_label}}
+              </span>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="lfrp-empty">
+        No one is currently looking for RP.
+      </div>
+    {{/if}}
+
+    {{#if this.custom.lfrp_can_use}}
+      <div class="lfrp-buttons">
+        {{#if this.custom.lfrp_active}}
+          <BsButton
+            @type="secondary"
+            @size="sm"
+            @onClick={{this.stopLookingForRp}}
+            class="lfrp-button"
+          >
+            Stop
+          </BsButton>
+        {{else}}
+          <BsDropdown @direction="up" as |dd|>
+            <dd.button
+              @type="primary"
+              @size="sm"
+              class="lfrp-button"
+            >
+              Look for RP <span class="caret"></span>
+            </dd.button>
+
+            <dd.menu as |menu|>
+              <menu.item>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  {{on "click" this.lookForAnyRp}}
+                >
+                  Any Scene
+                </button>
+              </menu.item>
+
+              <menu.item>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  {{on "click" this.lookForTxtRp}}
+                >
+                  TXT Only
+                </button>
+              </menu.item>
+
+              <menu.item>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  {{on "click" this.lookForLiveRp}}
+                >
+                  Live Only
+                </button>
+              </menu.item>
+
+              <menu.item>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  {{on "click" this.lookForAsyncRp}}
+                >
+                  Async Only
+                </button>
+              </menu.item>
+            </dd.menu>
+          </BsDropdown>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+</div>
