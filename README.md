@@ -51,6 +51,8 @@ Default configuration:
     lfrp:
       default_hours: 6
       max_hours: 12
+      announce_channel: RP Requests
+      refresh_seconds: 20
 
 `default_hours` controls how long an LFRP entry lasts when no duration is provided.
 
@@ -58,11 +60,7 @@ Default configuration:
 
 `announce_channel` controls which channel receives LFRP start, stop, and preference-change announcements.
 
-`shortcuts` may be used to define Ares command shortcuts for the plugin. It is empty by default.
-
 `refresh_seconds` controls how often the web portal sidebar refreshes the LFRP list. The default is 20 seconds when the value is missing, blank, or not a number. Set this to 0 to disable automatic polling. Values from 1 through 4 are treated as 5 seconds. Values above 60 are treated as 60 seconds.
-
-If the config file is missing or incomplete, the plugin falls back to 6 default hours, 12 max hours, and the `RP Requests` announce channel.
 
 ## Repository Layout
 
