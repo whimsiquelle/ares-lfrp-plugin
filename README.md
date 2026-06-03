@@ -60,6 +60,8 @@ Default configuration:
 
 `shortcuts` may be used to define Ares command shortcuts for the plugin. It is empty by default.
 
+`refresh_seconds` controls how often the web portal sidebar refreshes the LFRP list. The default is 20 seconds when the value is missing, blank, or not a number. Set this to 0 to disable automatic polling. Values from 1 through 4 are treated as 5 seconds. Values above 60 are treated as 60 seconds.
+
 If the config file is missing or incomplete, the plugin falls back to 6 default hours, 12 max hours, and the `RP Requests` announce channel.
 
 ## Repository Layout
@@ -77,9 +79,8 @@ If the config file is missing or incomplete, the plugin falls back to 6 default 
 
 1. Run `plugin/install https://github.com/whimsiquelle/ares-lfrp-plugin`.
 2. Review `game/config/lfrp.yml`.
-3. Restart the game if your install process requires it.
-4. Manually review and merge the files in `custom_files/`.
-5. Run `website/deploy` after modifying anything in `ares-webportal`.
+3. Manually review and merge the files in `custom_files/`.
+4. Run `website/deploy` after modifying anything in `ares-webportal`.
 
 ## Web Portal Files
 
