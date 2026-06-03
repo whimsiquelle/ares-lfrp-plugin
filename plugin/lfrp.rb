@@ -8,6 +8,10 @@ module AresMUSH
       File.dirname(__FILE__)
     end
 
+    def self.plugin_version
+      "0.1.0"
+    end
+
     def self.shortcuts
       Global.read_config("lfrp", "shortcuts")
     end

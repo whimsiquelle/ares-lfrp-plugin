@@ -64,23 +64,22 @@ If the config file is missing or incomplete, the plugin falls back to 6 default 
 
 ## Repository Layout
 
-    game/config/
-      lfrp.yml
-
     plugin/
       Server-side AresMUSH plugin files. Ares installs these into `aresmush/plugins/lfrp/`.
 
+    game/config/
+      Default configuration file.
+
     custom_files/
-      Web portal files, styling, and merge templates.
+      Manual merge files for web portal and website customizations. The Ares installer ignores this folder.
 
 ## Install
 
-1. Run `plugin/install REPO_URL`.
+1. Run `plugin/install https://github.com/whimsiquelle/ares-lfrp-plugin`.
 2. Review `game/config/lfrp.yml`.
-3. Review the files in `custom_files/`.
-4. Merge the sidebar files into your web portal if needed.
-5. Add the optional LFRP styling to your theme if desired.
-6. Run `website/deploy` after modifying anything in `ares-webportal`.
+3. Restart the game if your install process requires it.
+4. Manually review and merge the files in `custom_files/`.
+5. Run `website/deploy` after modifying anything in `ares-webportal`.
 
 ## Web Portal Files
 
@@ -143,3 +142,8 @@ See the AresMUSH guide to removing plugins for general help:
 https://aresmush.com/tutorials/code/contribs.html#uninstalling-plugins
 
 
+
+
+## License
+
+This is an unofficial community plugin for AresMUSH. Community-developed AresMUSH plugins fall under the same license requirements as the original AresMUSH code.
