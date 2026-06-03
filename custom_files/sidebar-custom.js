@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { later, cancel } from '@ember/runloop';
 
-const LFRP_REFRESH_INTERVAL = 20000;
+const DEFAULT_LFRP_REFRESH_SECONDS = 20;
 
 export default Component.extend({
   tagName: '',
@@ -16,8 +16,12 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
-    this.refreshLfrp();
-    this.scheduleLfrpRefresh();
+    this.refreshLfrp()
+      .finally(() => {
+        if (!this.isDestroying && !this.isDestroyed) {
+          this.scheduleLfrpRefresh();
+        }
+      });
   },
 
   willDestroyElement() {
@@ -26,8 +30,36 @@ export default Component.extend({
     this.cancelLfrpRefresh();
   },
 
+  lfrpRefreshSeconds() {
+    let seconds = parseInt(this.get('custom.lfrp_refresh_seconds'), 10);
+
+    if (isNaN(seconds)) {
+      return DEFAULT_LFRP_REFRESH_SECONDS;
+    }
+
+    if (seconds === 0) {
+      return 0;
+    }
+
+    if (seconds < 5) {
+      return 5;
+    }
+
+    if (seconds > 60) {
+      return 60;
+    }
+
+    return seconds;
+  },
+
   scheduleLfrpRefresh() {
     this.cancelLfrpRefresh();
+
+    let seconds = this.lfrpRefreshSeconds();
+
+    if (seconds === 0) {
+      return;
+    }
 
     let timer = later(this, function() {
       this.refreshLfrp()
@@ -36,7 +68,7 @@ export default Component.extend({
             this.scheduleLfrpRefresh();
           }
         });
-    }, LFRP_REFRESH_INTERVAL);
+    }, seconds * 1000);
 
     this.set('lfrpRefreshTimer', timer);
   },
@@ -65,6 +97,10 @@ export default Component.extend({
 
         if (response.hasOwnProperty('lfrp_active')) {
           this.set('custom.lfrp_active', response.lfrp_active);
+        }
+
+        if (response.hasOwnProperty('lfrp_refresh_seconds')) {
+          this.set('custom.lfrp_refresh_seconds', response.lfrp_refresh_seconds);
         }
       })
       .catch(() => {

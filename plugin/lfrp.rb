@@ -9,7 +9,7 @@ module AresMUSH
     end
 
     def self.plugin_version
-      "0.1.0"
+      "0.1.1"
     end
 
     def self.shortcuts
@@ -66,6 +66,23 @@ module AresMUSH
 
     def self.max_hours
       Lfrp.config_int("max_hours", 12)
+    end
+
+    def self.refresh_seconds
+      value = Global.read_config("lfrp", "refresh_seconds")
+
+      return 20 if value.blank?
+
+      value = value.to_i
+
+      return 0 if value == 0
+      return 5 if value < 5
+      return 60 if value > 60
+
+      value
+    rescue Exception => ex
+      Global.logger.warn "Unable to read LFRP refresh_seconds config: #{ex}"
+      20
     end
 
     def self.can_use_lfrp?(char)

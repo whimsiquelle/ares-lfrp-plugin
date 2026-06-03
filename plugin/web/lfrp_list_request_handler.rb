@@ -9,7 +9,8 @@ module AresMUSH
         {
           lfrp: Lfrp.web_sidebar_data(enactor),
           lfrp_can_use: Lfrp.can_use_lfrp?(enactor),
-          lfrp_active: Lfrp.active?(Lfrp.find_entry(enactor))
+          lfrp_active: Lfrp.active?(Lfrp.find_entry(enactor)),
+          lfrp_refresh_seconds: Lfrp.refresh_seconds
         }
       end
     end

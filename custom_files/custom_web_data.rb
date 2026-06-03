@@ -14,7 +14,8 @@ module AresMUSH
       return {
         lfrp: Lfrp.web_sidebar_data(viewer),
         lfrp_can_use: Lfrp.can_use_lfrp?(viewer),
-        lfrp_active: Lfrp.active?(Lfrp.find_entry(viewer))
+        lfrp_active: Lfrp.active?(Lfrp.find_entry(viewer)),
+        lfrp_refresh_seconds: Lfrp.refresh_seconds
       }
     end
   end
