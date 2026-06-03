@@ -9,7 +9,7 @@ module AresMUSH
     end
 
     def self.plugin_version
-      "0.1.1"
+      "0.1.2"
     end
 
     def self.shortcuts
@@ -71,7 +71,7 @@ module AresMUSH
     def self.refresh_seconds
       value = Global.read_config("lfrp", "refresh_seconds")
 
-      return 20 if value.blank?
+      return 60 if value.blank?
 
       value = value.to_i
 
@@ -82,7 +82,7 @@ module AresMUSH
       value
     rescue Exception => ex
       Global.logger.warn "Unable to read LFRP refresh_seconds config: #{ex}"
-      20
+      60
     end
 
     def self.can_use_lfrp?(char)
@@ -215,6 +215,8 @@ module AresMUSH
           "LFRP: #{char.name} changed their scene preference from #{previous_label} to #{new_label}."
         )
       end
+
+      Lfrp.notify_web_update
     end
 
     def self.stop(char)
@@ -227,6 +229,8 @@ module AresMUSH
       if was_active
         Lfrp.announce_to_rp_requests("LFRP: #{char.name} has stopped looking for RP.")
       end
+
+      Lfrp.notify_web_update if was_active
     end
 
     def self.expires_in_words(entry)
@@ -301,6 +305,18 @@ module AresMUSH
     rescue Exception => ex
       Global.logger.warn "Unable to build LFRP sidebar data: #{ex.class} - #{ex.message}"
       []
+    end
+
+    def self.notify_web_update
+      data = {
+        lfrp: Lfrp.web_sidebar_data
+      }
+
+      Global.client_monitor.notify_web_clients(:lfrp_update, data.to_json, true) do |char|
+        char ? true : false
+      end
+    rescue Exception => ex
+      Global.logger.warn "Unable to notify web clients of LFRP update: #{ex}"
     end
 
     def self.announce_channel_name

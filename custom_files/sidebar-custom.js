@@ -3,18 +3,23 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { later, cancel } from '@ember/runloop';
 
-const DEFAULT_LFRP_REFRESH_SECONDS = 20;
+const DEFAULT_LFRP_REFRESH_SECONDS = 60;
 
 export default Component.extend({
   tagName: '',
 
   gameApi: service(),
+  gameSocket: service(),
   flashMessages: service(),
 
   lfrpRefreshTimer: null,
 
   didInsertElement() {
     this._super(...arguments);
+
+    this.gameSocket.setupCallback('lfrp_update', (type, msg, timestamp) => {
+      this.onLfrpUpdate(type, msg, timestamp);
+    });
 
     this.refreshLfrp()
       .finally(() => {
@@ -28,6 +33,7 @@ export default Component.extend({
     this._super(...arguments);
 
     this.cancelLfrpRefresh();
+    this.gameSocket.removeCallback('lfrp_update');
   },
 
   lfrpRefreshSeconds() {
@@ -79,6 +85,29 @@ export default Component.extend({
     if (timer) {
       cancel(timer);
       this.set('lfrpRefreshTimer', null);
+    }
+  },
+
+  onLfrpUpdate(type, msg, timestamp) {
+    if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
+
+    let response = {};
+
+    try {
+      response = JSON.parse(msg);
+    }
+    catch(e) {
+      this.refreshLfrp();
+      return;
+    }
+
+    if (response.hasOwnProperty('lfrp')) {
+      this.set('custom.lfrp', response.lfrp || []);
+    }
+    else {
+      this.refreshLfrp();
     }
   },
 

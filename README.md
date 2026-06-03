@@ -25,6 +25,7 @@ Other versions may work, but have not been tested.
 * Expires LFRP entries automatically.
 * Provides in-game commands and help.
 * Provides web request handlers for portal integration.
+* Supports websocket-driven sidebar updates with a periodic refresh fallback.
 * Includes optional neutral sidebar styling.
 
 ## Commands
@@ -52,7 +53,7 @@ Default configuration:
       default_hours: 6
       max_hours: 12
       announce_channel: RP Requests
-      refresh_seconds: 20
+      refresh_seconds: 60
 
 `default_hours` controls how long an LFRP entry lasts when no duration is provided.
 
@@ -60,7 +61,9 @@ Default configuration:
 
 `announce_channel` controls which channel receives LFRP start, stop, and preference-change announcements.
 
-`refresh_seconds` controls how often the web portal sidebar refreshes the LFRP list. The default is 20 seconds when the value is missing, blank, or not a number. Set this to 0 to disable automatic polling. Values from 1 through 4 are treated as 5 seconds. Values above 60 are treated as 60 seconds.
+`refresh_seconds` controls the web portal sidebar's periodic fallback refresh. The default is 60 seconds when the value is missing, blank, or not a number. Set this to 0 to disable automatic polling. Values from 1 through 4 are treated as 5 seconds. Values above 60 are treated as 60 seconds.
+
+The sidebar also listens for the custom `lfrp_update` websocket event. When someone starts, stops, or changes their LFRP status, the server pushes an update to connected web clients so the sidebar can update without waiting for the next fallback refresh.
 
 ## Repository Layout
 
@@ -100,7 +103,7 @@ The included sidebar component uses these web request handlers:
     lfrpStart
     lfrpStop
 
-The sidebar refreshes the LFRP list automatically.
+The sidebar loads the LFRP list when it starts, listens for `lfrp_update` websocket events, and keeps a periodic fallback refresh so missed websocket events and natural expirations self-correct.
 
 ## Styling
 

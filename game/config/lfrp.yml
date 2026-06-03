@@ -3,4 +3,4 @@ lfrp:
   default_hours: 6
   max_hours: 12
   announce_channel: RP Requests
-  refresh_seconds: 20
+  refresh_seconds: 60
